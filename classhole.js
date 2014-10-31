@@ -26,7 +26,7 @@
                 if (!collection_of_regex.hasOwnProperty(cls)) {
                     collection_of_regex[cls] = new RegExp('(?:^|\\s)' + cls + '(?!\\S)', 'g');
                 }
-                return element.className.match(collection_of_regex[cls]);
+                return element.className.test(collection_of_regex[cls]);
             };
             addClass = function (element, cls) {
                 if (!hasClass(element, cls)) {
