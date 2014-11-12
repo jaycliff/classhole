@@ -14,6 +14,15 @@
     limitations under the License.
 */
 /*jslint browser: true, devel: true */
+if (!String.prototype.trim) {
+    (function (rtrim) {
+        "use strict";
+        String.prototype.trim = function () {
+            return this.replace(rtrim, '');
+        };
+        // Make sure we trim BOM and NBSP
+    }(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g));
+}
 (function (global) {
     "use strict";
     var classhole,
@@ -42,7 +51,7 @@
                 if (!collection_of_regex.hasOwnProperty(cls)) {
                     collection_of_regex[cls] = new RegExp('(?:^|\\s)' + cls + '(?!\\S)', 'g');
                 }
-                element.className = element.className.replace(collection_of_regex[cls], '');
+                element.className = (element.className.replace(collection_of_regex[cls], '')).trim();
             };
         }());
     } else {
