@@ -1,7 +1,7 @@
 classhole
 =========
 
-Classhole is a trio of (garbage-collector-friendly) functions to manipulate a DOM element's class attribute. The function names are pretty self-explanatory.
+Classhole is a trio of (low-garbage) functions to manipulate a DOM element's class attribute. The function names are pretty self-explanatory.
 
 ## hasClass
 
