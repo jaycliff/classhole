@@ -30,6 +30,7 @@ var classhole = (function () {
         hasClass,
         addClass,
         removeClass;
+    // Whitespace: http://stackoverflow.com/questions/1731190/javascript-check-if-a-string-has-white-space
     window.collection_of_regex = collection_of_regex;
     function hasClass(element, cls) {
         cls = String(cls).trim();
