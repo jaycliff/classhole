@@ -23,122 +23,50 @@ if (!String.prototype.trim) {
         // Make sure we trim BOM and NBSP
     }(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g));
 }
-(function (window) {
+var classhole = (function () {
     "use strict";
-    var classhole,
+    var ch,
+        collection_of_regex = {},
         hasClass,
         addClass,
         removeClass;
-    if (window.hasOwnProperty('classhole') && typeof window.classhole === "object") {
-        return;
+    window.collection_of_regex = collection_of_regex;
+    function hasClass(element, cls) {
+        cls = String(cls).trim();
+        if (cls === '') {
+            throw new TypeError('The token provided must not be empty');
+        }
+        if (!collection_of_regex.hasOwnProperty(cls)) {
+            collection_of_regex[cls] = new RegExp('(?:^|\\s)' + cls + '(?!\\S)', 'g');
+        }
+        return collection_of_regex[cls].test(element.className);
     }
-    classhole = {};
-    if (typeof document.documentElement.classList !== "object") {
-        (function () {
-            var collection_of_regex = {};
-            hasClass = function (element, cls) {
-                cls = String(cls).trim();
-                if (cls === '') {
-                    throw new TypeError('The token provided must not be empty');
-                }
-                if (!collection_of_regex.hasOwnProperty(cls)) {
-                    collection_of_regex[cls] = new RegExp('(?:^|\\s)' + cls + '(?!\\S)', 'g');
-                }
-                return collection_of_regex[cls].test(element.className);
-            };
-            addClass = function (element, cls) {
-                cls = String(cls).trim();
-                if (cls === '') {
-                    throw new TypeError('The token provided must not be empty');
-                }
-                if (!hasClass(element, cls)) {
-                    element.className += (' ' + cls);
-                }
-            };
-            removeClass = function (element, cls) {
-                cls = String(cls).trim();
-                if (cls === '') {
-                    throw new TypeError('The token provided must not be empty');
-                }
-                if (!collection_of_regex.hasOwnProperty(cls)) {
-                    collection_of_regex[cls] = new RegExp('(?:^|\\s)' + cls + '(?!\\S)', 'g');
-                }
-                element.className = (element.className.replace(collection_of_regex[cls], '')).trim();
-            };
-        }());
-    } else {
-        hasClass = function (element, cls) {
-            cls = String(cls).trim();
-            if (cls === '') {
-                throw new TypeError('The token provided must not be empty');
-            }
-            return element.classList.contains(cls);
-        };
-        addClass = function (element, cls) {
-            cls = String(cls).trim();
-            if (cls === '') {
-                throw new TypeError('The token provided must not be empty');
-            }
-            element.classList.add(cls);
-        };
-        removeClass = function (element, cls) {
-            cls = String(cls).trim();
-            if (cls === '') {
-                throw new TypeError('The token provided must not be empty');
-            }
-            element.classList.remove(cls);
-        };
+    function addClass(element, cls) {
+        cls = String(cls).trim();
+        if (cls === '') {
+            throw new TypeError('The token provided must not be empty');
+        }
+        if (!hasClass(element, cls)) {
+            element.className += (' ' + cls);
+        }
     }
-    if (typeof Object.defineProperty === "function") {
-        Object.defineProperty(classhole, 'hasClass', {
-            enumerable: false,
-            configurable: false,
-            writable: false,
-            value: hasClass
-        });
-        Object.defineProperty(classhole, 'addClass', {
-            enumerable: false,
-            configurable: false,
-            writable: false,
-            value: addClass
-        });
-        Object.defineProperty(classhole, 'removeClass', {
-            enumerable: false,
-            configurable: false,
-            writable: false,
-            value: removeClass
-        });
-        Object.defineProperty(window, 'classhole', {
-            enumerable: true,
-            configurable: false,
-            writable: false,
-            value: classhole
-        });
-        Object.defineProperty(window, 'hasClass', {
-            enumerable: true,
-            configurable: false,
-            writable: false,
-            value: hasClass
-        });
-        Object.defineProperty(window, 'addClass', {
-            enumerable: true,
-            configurable: false,
-            writable: false,
-            value: addClass
-        });
-        Object.defineProperty(window, 'removeClass', {
-            enumerable: true,
-            configurable: false,
-            writable: false,
-            value: removeClass
-        });
-    } else {
-        classhole.hasClass = hasClass;
-        classhole.addClass = addClass;
-        classhole.removeClass = removeClass;
-        window.classhole = classhole;
-        window.hasClass = hasClass;
-        window.addClass = addClass;
-        window.removeClass = removeClass;
+    function removeClass(element, cls) {
+        cls = String(cls).trim();
+        if (cls === '') {
+            throw new TypeError('The token provided must not be empty');
+        }
+        if (!collection_of_regex.hasOwnProperty(cls)) {
+            collection_of_regex[cls] = new RegExp('(?:^|\\s)' + cls + '(?!\\S)', 'g');
+        }
+        element.className = (element.className.replace(collection_of_regex[cls], '')).trim();
     }
-}(window));
+    ch = {
+        'addClass': addClass,
+        'removeClass': removeClass,
+        'hasClass': hasClass
+    };
+    if (typeof Object.freeze === "function") {
+        Object.freeze(ch);
+    }
+    return ch;
+}());
