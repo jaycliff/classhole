@@ -31,6 +31,7 @@ var classhole = (function () {
         addClass,
         removeClass;
     // Whitespace: http://stackoverflow.com/questions/1731190/javascript-check-if-a-string-has-white-space
+    // Check if DOM element: http://stackoverflow.com/questions/384286/javascript-isdom-how-do-you-check-if-a-javascript-object-is-a-dom-object
     window.collection_of_regex = collection_of_regex;
     function hasClass(element, cls) {
         cls = String(cls).trim();
