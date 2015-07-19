@@ -68,12 +68,24 @@ if (!String.prototype.trim) {
         }());
     } else {
         hasClass = function (element, cls) {
+            cls = String(cls).trim();
+            if (cls === '') {
+                throw new TypeError('The token provided must not be empty');
+            }
             return element.classList.contains(cls);
         };
         addClass = function (element, cls) {
+            cls = String(cls).trim();
+            if (cls === '') {
+                throw new TypeError('The token provided must not be empty');
+            }
             element.classList.add(cls);
         };
         removeClass = function (element, cls) {
+            cls = String(cls).trim();
+            if (cls === '') {
+                throw new TypeError('The token provided must not be empty');
+            }
             element.classList.remove(cls);
         };
     }
