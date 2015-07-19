@@ -1,5 +1,5 @@
 /*
-    Copyright 2014 Jaycliff Arcilla
+    Copyright 2015 Jaycliff Arcilla
     
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -23,31 +23,43 @@ if (!String.prototype.trim) {
         // Make sure we trim BOM and NBSP
     }(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g));
 }
-(function (global) {
+(function (window) {
     "use strict";
     var classhole,
         hasClass,
         addClass,
         removeClass;
-    if (global.hasOwnProperty('classhole') && typeof global.classhole === "object") {
+    if (window.hasOwnProperty('classhole') && typeof window.classhole === "object") {
         return;
     }
     classhole = {};
-    if (!document.documentElement.classList) {
+    if (typeof document.documentElement.classList !== "object") {
         (function () {
             var collection_of_regex = {};
             hasClass = function (element, cls) {
+                cls = String(cls).trim();
+                if (cls === '') {
+                    throw new TypeError('The token provided must not be empty');
+                }
                 if (!collection_of_regex.hasOwnProperty(cls)) {
                     collection_of_regex[cls] = new RegExp('(?:^|\\s)' + cls + '(?!\\S)', 'g');
                 }
                 return collection_of_regex[cls].test(element.className);
             };
             addClass = function (element, cls) {
+                cls = String(cls).trim();
+                if (cls === '') {
+                    throw new TypeError('The token provided must not be empty');
+                }
                 if (!hasClass(element, cls)) {
                     element.className += (' ' + cls);
                 }
             };
             removeClass = function (element, cls) {
+                cls = String(cls).trim();
+                if (cls === '') {
+                    throw new TypeError('The token provided must not be empty');
+                }
                 if (!collection_of_regex.hasOwnProperty(cls)) {
                     collection_of_regex[cls] = new RegExp('(?:^|\\s)' + cls + '(?!\\S)', 'g');
                 }
@@ -84,25 +96,25 @@ if (!String.prototype.trim) {
             writable: false,
             value: removeClass
         });
-        Object.defineProperty(global, 'classhole', {
+        Object.defineProperty(window, 'classhole', {
             enumerable: true,
             configurable: false,
             writable: false,
             value: classhole
         });
-        Object.defineProperty(global, 'hasClass', {
+        Object.defineProperty(window, 'hasClass', {
             enumerable: true,
             configurable: false,
             writable: false,
             value: hasClass
         });
-        Object.defineProperty(global, 'addClass', {
+        Object.defineProperty(window, 'addClass', {
             enumerable: true,
             configurable: false,
             writable: false,
             value: addClass
         });
-        Object.defineProperty(global, 'removeClass', {
+        Object.defineProperty(window, 'removeClass', {
             enumerable: true,
             configurable: false,
             writable: false,
@@ -112,9 +124,9 @@ if (!String.prototype.trim) {
         classhole.hasClass = hasClass;
         classhole.addClass = addClass;
         classhole.removeClass = removeClass;
-        global.classhole = classhole;
-        global.hasClass = hasClass;
-        global.addClass = addClass;
-        global.removeClass = removeClass;
+        window.classhole = classhole;
+        window.hasClass = hasClass;
+        window.addClass = addClass;
+        window.removeClass = removeClass;
     }
 }(window));
